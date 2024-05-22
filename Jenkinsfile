@@ -29,7 +29,7 @@ pipeline {
             emailext attachmentsPattern: '**/junit/*.xml',
                 body: 'Please check the attached JUnit XML files for test results.',
                 subject: 'Cypress Test Results',
-                to: 'your@email.com'
+                to: 'bocseflorin@yahoo.com'
         }
     }
 }
