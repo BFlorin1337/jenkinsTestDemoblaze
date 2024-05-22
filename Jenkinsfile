@@ -23,11 +23,3 @@ pipeline {
         }
     }
 
-    post {
-        always {
-            archiveArtifacts artifacts: 'cypress/screenshots/**/*.*', allowEmptyArchive: true
-            archiveArtifacts artifacts: 'cypress/videos/**/*.*', allowEmptyArchive: true
-            junit 'cypress/results/*.xml' // If you generate JUnit reports
-        }
-    }
-}
