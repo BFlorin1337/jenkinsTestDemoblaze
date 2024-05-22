@@ -1,7 +1,7 @@
 pipeline {
     agent any
     tools {
-        nodejs "NodeJS 14"
+        nodejs "NodeJS 14" // Adjust this to your NodeJS installation name
     }
     stages {
         stage('Checkout') {
