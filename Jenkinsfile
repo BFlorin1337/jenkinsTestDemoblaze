@@ -21,11 +21,11 @@ pipeline {
         stage('Run Cypress Tests') {
             steps {
                 script {
-                    def cypressOutput = sh(script: 'npx cypress run --reporter junit,json', returnStdout: true).trim()
-                    currentBuild.result = cypressOutput.contains("All specs passed") ? 'SUCCESS' : 'FAILURE'
+                    sh 'npx cypress run --reporter junit,json'
                 }
             }
         }
+
 
         stage('Generate Allure Report') {
             steps {
