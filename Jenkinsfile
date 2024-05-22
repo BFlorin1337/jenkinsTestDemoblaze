@@ -2,13 +2,13 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS 14' // This should match the name given in Step 2
+        nodejs 'NodeJS 14' // Ensure this matches the configured tool name exactly
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze'
+                git branch: 'main', url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze', credentialsId: 'your-credentials-id'
             }
         }
         stage('Install Dependencies') {
@@ -22,4 +22,4 @@ pipeline {
             }
         }
     }
-
+}
