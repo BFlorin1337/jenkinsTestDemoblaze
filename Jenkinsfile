@@ -14,6 +14,8 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
+                sh 'npm install cypress-multi-reporters --save-dev'
+            }
             }
         }
         stage('Run Tests') {
