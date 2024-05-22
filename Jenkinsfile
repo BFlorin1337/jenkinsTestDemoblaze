@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS 14"
+        nodejs "NodeJS_14"
     }
 
     environment {
@@ -52,6 +52,7 @@ pipeline {
 
         stage('Run Cucumber Tests') {
             steps {
+                sh 'npm install cucumber'
                 sh 'cucumber-js'
             }
         }
