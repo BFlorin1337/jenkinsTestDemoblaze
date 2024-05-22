@@ -2,35 +2,45 @@ pipeline {
     agent any
 
     tools {
-        nodejs 'NodeJS 14' // Ensure this matches the configured tool name exactly
+        nodejs "NodeJS 14"
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze', credentialsId: 'your-credentials-id'
+                git url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze', branch: 'main'
             }
         }
+
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
-                sh 'npm install cypress-multi-reporters --save-dev'
             }
         }
-        stage('Run Tests') {
+
+        stage('Run Cypress Tests') {
             steps {
-                sh 'npx cypress run'
+                script {
+                    def cypressOutput = sh(script: 'npx cypress run', returnStdout: true).trim()
+                    currentBuild.result = cypressOutput.contains("All specs passed") ? 'SUCCESS' : 'FAILURE'
+                }
             }
         }
     }
 
     post {
         always {
-            junit '**/junit/*.xml'
-            emailext attachmentsPattern: '**/junit/*.xml',
-                body: 'Please check the attached JUnit XML files for test results.',
-                subject: 'Cypress Test Results',
-                to: 'bocseflorin@yahoo.com'
+            script {
+                if (currentBuild.result == 'FAILURE') {
+                    emailext body: 'Cypress tests have failed. Please check the build logs for details.',
+                        subject: 'Cypress Test Failed',
+                        to: 'bocseflorin@yahoo.com'
+                } else if (currentBuild.result == 'SUCCESS') {
+                    emailext body: 'Cypress tests have passed successfully.',
+                        subject: 'Cypress Test Passed',
+                        to: 'bocseflorin@yahoo.com'
+                }
+            }
         }
     }
 }
