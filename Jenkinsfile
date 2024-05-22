@@ -42,10 +42,10 @@ pipeline {
         }
     }
 
-post {
-    always {
-        archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
-        junit '**/junit/*.xml'
+    post {
+        always {
+            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
+            junit '**/junit/*.xml'
+        }
     }
 }
-
