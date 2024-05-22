@@ -2,50 +2,24 @@ pipeline {
     agent any
 
     tools {
-        nodejs "NodeJS 14"
-        allure 'Allure'
-    }
-
-    environment {
-        ALLURE_VERSION = '2.13.8'
+        nodejs 'NodeJS 14' // Ensure this matches the configured tool name exactly
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze', branch: 'main'
+                git branch: 'main', url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze', credentialsId: 'your-credentials-id'
             }
         }
-
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
             }
         }
-
-        stage('Run Cypress Tests') {
+        stage('Run Tests') {
             steps {
                 sh 'npx cypress run'
             }
-        }
-
-        stage('Generate Allure Report') {
-            steps {
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    properties: [],
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'allure-results']]
-                ])
-            }
-        }
-    }
-
-    post {
-        always {
-            archiveArtifacts artifacts: 'allure-report/**', allowEmptyArchive: true
-            junit '**/junit/*.xml'
         }
     }
 }
