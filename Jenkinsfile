@@ -6,7 +6,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/BFlorin1337/jenkinsTestDemoblaze'
+                git branch: 'main', url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze'
             }
         }
         stage('Install Dependencies') {
