@@ -52,8 +52,7 @@ pipeline {
 
         stage('Run Cucumber Tests') {
             steps {
-                sh 'npm install cucumber'
-                sh 'cucumber-js'
+                sh './node_modules/.bin/cucumber-js'
             }
         }
 
