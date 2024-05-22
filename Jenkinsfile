@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/yourusername/jenkinstesting.git'
+                git branch: 'main', url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze'
             }
         }
         stage('Install Dependencies') {
