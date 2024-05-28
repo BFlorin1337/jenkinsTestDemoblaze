@@ -1,46 +1,46 @@
 pipeline {
     agent any
+
     tools {
-        nodejs "NodeJS 14" // Adjust this to your NodeJS installation name
+        nodejs "NodeJS 14"
     }
+
     stages {
         stage('Checkout') {
             steps {
-                git branch: 'main', url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze'
+                git url: 'https://github.com/BFlorin1337/jenkinsTestDemoblaze', branch: 'main'
             }
         }
+
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
             }
         }
+
         stage('Run Cypress Tests') {
             steps {
-                sh 'npx cypress run --env allure=true --reporter cypress-multi-reporters --reporter-options configFile=reporter-config.json'
-            }
-        }
-        stage('Generate Allure Report') {
-            steps {
-                allure([
-                    includeProperties: false,
-                    jdk: '',
-                    properties: [],
-                    reportBuildPolicy: 'ALWAYS',
-                    results: [[path: 'allure-results']]
-                ])
+                script {
+                    def cypressOutput = sh(script: 'npx cypress run', returnStdout: true).trim()
+                    currentBuild.result = cypressOutput.contains("All specs passed") ? 'SUCCESS' : 'FAILURE'
+                }
             }
         }
     }
+
     post {
         always {
-            emailext(
-                to: 'bocseflorin@yahoo.com',
-                subject: "Build ${currentBuild.fullDisplayName} - ${currentBuild.result}",
-                body: "Check the Allure Report at ${env.BUILD_URL}allure/",
-                attachLog: true,
-                compressLog: true,
-                mimeType: 'text/html'
-            )
+            script {
+                if (currentBuild.result == 'FAILURE') {
+                    emailext body: 'Cypress tests have failed. Please check the build logs for details.',
+                        subject: 'Cypress Test Failed',
+                        to: 'bocseflorin@yahoo.com'
+                } else if (currentBuild.result == 'SUCCESS') {
+                    emailext body: 'Cypress tests have passed successfully.',
+                        subject: 'Cypress Test Passed',
+                        to: 'bocseflorin@yahoo.com'
+                }
+            }
         }
     }
 }
