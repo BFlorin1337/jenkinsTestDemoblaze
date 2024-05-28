@@ -2,8 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven 3' // Ensure this is configured in Jenkins
-        nodejs 'NodeJS 14' // Ensure this is configured in Jenkins
+        nodejs "NodeJS 14"
     }
 
     stages {
@@ -13,13 +12,7 @@ pipeline {
             }
         }
 
-        stage('Build Backend') {
-            steps {
-                sh 'mvn clean install'
-            }
-        }
-
-        stage('Install Frontend Dependencies') {
+        stage('Install Dependencies') {
             steps {
                 sh 'npm install'
             }
@@ -39,12 +32,12 @@ pipeline {
         always {
             script {
                 if (currentBuild.result == 'FAILURE') {
-                    emailext body: 'Build or tests have failed. Please check the build logs for details.',
-                        subject: 'Build/Test Failed',
+                    emailext body: 'Cypress tests have failed. Please check the build logs for details.',
+                        subject: 'Cypress Test Failed',
                         to: 'bocseflorin@yahoo.com'
                 } else if (currentBuild.result == 'SUCCESS') {
-                    emailext body: 'Build and tests have passed successfully.',
-                        subject: 'Build/Test Passed',
+                    emailext body: 'Cypress tests have passed successfully.',
+                        subject: 'Cypress Test Passed',
                         to: 'bocseflorin@yahoo.com'
                 }
             }
