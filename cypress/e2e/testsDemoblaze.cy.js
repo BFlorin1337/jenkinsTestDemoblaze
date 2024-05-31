@@ -2,6 +2,7 @@ describe("Automation tests for Demoblaze application (https://www.demoblaze.com/
   beforeEach(() => {
     cy.visit("https://demoblaze.com/");
   });
+  
   it("Users can successfully navigate among the application pages.", () => {
     cy.contains("Home").click();
     cy.url().should("include","/index.html");
@@ -87,23 +88,20 @@ describe("Automated test scenarios for the sign up and log in functionalities.",
     cy.visit("https://demoblaze.com/");
   });
 
-  const name = "FlorinBocse123"
-  const password = "12parola34"
-
   it("Tests the sign up function.", () => {
 
     cy.get("#navbarExample").contains("Sign up").click().wait(1000);
-    cy.get("#sign-username").type(name);
-    cy.get("#sign-password").type(password);
+    cy.get("#sign-username").type("FlorinBocse");
+    cy.get("#sign-password").type("pass1234");
     cy.get(".modal-footer").contains("Sign up").click().wait(1000);
   })
 
     it("Tests the log in function.", () => {
 
       cy.get("#navbarExample").contains("Log in").click().wait(1000);
-      cy.get("#loginusername").type(name);
-      cy.get("#loginpassword").type(password);
+      cy.get("#loginusername").type("FlorinBocse");
+      cy.get("#loginpassword").type("pass1234");
       cy.get(".modal-footer").contains("Log in").click().wait(1000);
-      cy.get("#navbarExample").should("contain","Welcome " + name);
+      cy.get("#navbarExample").should("contain","Welcome FlorinBocse");
     }) 
 })
